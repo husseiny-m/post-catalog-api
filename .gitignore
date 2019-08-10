@@ -1,0 +1,11 @@
+# Dependencies
+node_modules
+package-lock.json
+
+# Env. Variables
+variables.env
+variables.env.now
+
+# Editors
+.vscode
+.idea
