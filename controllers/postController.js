@@ -15,5 +15,25 @@ exports.cratePost = async (req, res) => {
 exports.deletePost = async (req, res) => {
   const postId = req.params.id;
   await Post.deleteOne({ _id: postId });
-  res.status(HTTPStatus.OK).json({ message: "Post deleted!" });;
+  res.status(HTTPStatus.OK).json({ message: "Post deleted!" });
 }
+
+exports.updatePost = async (req, res) => {
+  const postId = req.params.id;
+  const post = {
+    _id: req.body.id,
+    title: req.body.title,
+    content: req.body.content
+  }
+  await Post.updateOne({ _id: postId }, post);
+  res.status(HTTPStatus.OK).json({ message: "Post updated successfully!" });
+}
+
+exports.getPost = async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if(post){
+    res.status(HTTPStatus.OK).json(post);
+  }else{
+    res.status(HTTPStatus.NOT_FOUND).json({message: 'Post not found!'});
+  }
+};
