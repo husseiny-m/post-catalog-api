@@ -4,12 +4,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const apiRoutes = require('./routes');
 const errorHandlers = require('./handlers/errorHandlers');
+const path = require('path');
 
 const app = express();
 
 
 
 app.use(cors());
+
+// serves up static files from the images folder. Anything in images/ will just be served up as the file it is
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Takes the raw requests and turns them into usable properties on req.body
 app.use(bodyParser.json());
