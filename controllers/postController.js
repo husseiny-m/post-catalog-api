@@ -30,8 +30,18 @@ const storage = multer.diskStorage({
 exports.uploadImage = multer({ storage }).single('image');
 
 exports.getPosts = async (req, res) => {
-  const posts = await Post.find().sort({ _id: 'asc' });
-  res.status(HTTPStatus.OK).json(posts);
+  const pageSize = +req.query.pagesize;
+  const currentPage = +req.query.page;
+  const skip = (currentPage * pageSize) - pageSize;
+
+  const postsPromise = Post.find()
+    .skip(skip)
+    .limit(pageSize)
+    .sort({ _id: 'asc' });
+
+  const countPromise = Post.countDocuments();
+  const [posts, count] = await Promise.all([postsPromise, countPromise]);
+  res.status(HTTPStatus.OK).json({ posts, count });
 };
 
 exports.cratePost = async (req, res) => {
